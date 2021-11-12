@@ -58,9 +58,9 @@ public class TicTimer extends Thread implements KeyListener {
     static int session_number = 1;
     
     // session timing variables
-    static Double d_int = new Double(0);
-    static int total_time;
-    static Double running_time = new Double(0);
+    static Double d_int = Double.valueOf(0);
+    static Double running_time = Double.valueOf(0);
+
     
     /* Setup the main JFrame and its components
      * BTW, this is directly called by TicTimer.run();

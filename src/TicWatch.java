@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.util.*;
 
 class TicWatch extends JPanel implements Runnable {
-    Integer sec_elapsed = new Integer(0);
+    Integer sec_elapsed = Integer.valueOf(0);
     Calendar time1;
     Calendar time2;
     Calendar timer = Calendar.getInstance();
