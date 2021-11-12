@@ -10,7 +10,7 @@ class ClockView extends JPanel implements Runnable {
     static Font bigFont = new Font("arial", Font.BOLD, 18);
 
     ClockView() {
-        this.setPreferredSize(new Dimension(220,40));
+        this.setPreferredSize(new Dimension(320,40));
         this.add(tLabel);
         tLabel.setFont(bigFont);
         this.refreshTimeDisplay();

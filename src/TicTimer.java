@@ -67,7 +67,7 @@ public class TicTimer extends Thread implements KeyListener {
      */
     public void setup_main_window(){
         // setup main window
-        main_frame.setSize(500,500);
+        main_frame.setSize(600,500);
         main_frame.setResizable(false);
         main_frame.getContentPane().setLayout( new FlowLayout(FlowLayout.CENTER,10,10) );
         main_frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -77,14 +77,14 @@ public class TicTimer extends Thread implements KeyListener {
         etched_border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
         
         // setup main panels
-        main_panel.setPreferredSize(new Dimension(450,450));
+        main_panel.setPreferredSize(new Dimension(550,450));
         Thread clock_thread = new Thread(clock_panel);
         clock_thread.start();
-        clock_panel.setPreferredSize(new Dimension(400,30));
+        clock_panel.setPreferredSize(new Dimension(500,30));
         main_panel.add(clock_panel);
         main_panel.add(session_start_label);
         session_status_panel.setBackground(Color.RED);
-        session_status_panel.setPreferredSize(new Dimension(400,30));
+        session_status_panel.setPreferredSize(new Dimension(500,30));
         session_status_label.setText("Session status: stopped");
         session_status_panel.add(session_status_label);
         session_time_panel.reset();
@@ -95,7 +95,7 @@ public class TicTimer extends Thread implements KeyListener {
         main_frame.addKeyListener(this);
         
         // add buttons
-        button_panel.setPreferredSize(new Dimension(430,40));
+        button_panel.setPreferredSize(new Dimension(530,40));
         ActionListener setupL = new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 //Setup can fail now
@@ -163,12 +163,12 @@ public class TicTimer extends Thread implements KeyListener {
         
         //Add Label for reward notification
         reward_notification_label.setBackground(Color.WHITE);
-        reward_notification_label.setPreferredSize(new Dimension(400,30));
+        reward_notification_label.setPreferredSize(new Dimension(500,30));
         reward_notification_label.setText("");
         reward_notification_label.setOpaque(true);
         
         // construct progress text area
-        progressscroll.setPreferredSize(new Dimension(300,150));
+        progressscroll.setPreferredSize(new Dimension(400,150));
         progressscroll.setBorder(etched_border);
         progress_area.setFont(new Font("Monospaced", Font.PLAIN, 12));
         progress_area.setEditable(false);

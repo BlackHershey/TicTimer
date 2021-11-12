@@ -16,7 +16,7 @@ class TicWatch extends JPanel implements Runnable {
     static Font bigFont = new Font("arial", Font.BOLD, 26);
     
     TicWatch() {
-        this.setPreferredSize(new Dimension(440,40));
+        this.setPreferredSize(new Dimension(540,40));
         this.add(tLabel);
         tLabel.setFont(bigFont);
         this.refreshTimeDisplay();
