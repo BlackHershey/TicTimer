@@ -61,6 +61,9 @@ public class TicTimer extends Thread implements KeyListener {
     static Double d_int = Double.valueOf(0);
     static Double running_time = Double.valueOf(0);
 
+    // session total tics and tic-free intervals counts
+    static int session_total_tics = 0;
+    static int session_total_ticfree_intervals = 0;
     
     /* Setup the main JFrame and its components
      * BTW, this is directly called by TicTimer.run();
@@ -463,8 +466,12 @@ public class TicTimer extends Thread implements KeyListener {
         session_running = false;
         //Display and Logs
         progress_area.append("Session over\n");
+        progress_area.append("Total tics = " + String.valueOf(TicTimer.session_total_tics) + "\n");
+        progress_area.append("Total tic-free intervals = " + String.valueOf(TicTimer.session_total_ticfree_intervals) + "\n");
         progressscroll.getVerticalScrollBar().setValue(TicTimer.progressscroll.getVerticalScrollBar().getMaximum());
         log_stream.println("Session " + TicTimer.session_number + " ended at " + TicTimer.clock_panel.getTimeAsString() + "\n");
+        log_stream.println("Total tics = " + String.valueOf(TicTimer.session_total_tics));
+        log_stream.println("Total tic-free intervals = " + String.valueOf(TicTimer.session_total_ticfree_intervals));
         log_stream.close();
         //Buttons and Notification
         session_status_panel.setBackground(Color.RED);
@@ -490,6 +497,7 @@ public class TicTimer extends Thread implements KeyListener {
             progress_area.append("Tic detected at " + session_time_panel.getTimeAsString() + "\n");
             progressscroll.getVerticalScrollBar().setValue(progressscroll.getVerticalScrollBar().getMaximum());
             log_stream.println("Tic detected at " + session_time_panel.getTimeAsString() + "\n");
+            session_total_tics = session_total_tics + 1;
         }
     }
     
@@ -501,6 +509,8 @@ public class TicTimer extends Thread implements KeyListener {
         
         progress_area.append("No tics for 10 seconds at " + session_time_panel.getTimeAsString() + "\n");
         log_stream.println("10s tic free interval ended at " + session_time_panel.getTimeAsString() + "\n");
+        
+        session_total_ticfree_intervals = session_total_ticfree_intervals + 1;
         
         if(session_type.equals("DRZ")){
             send_reward();

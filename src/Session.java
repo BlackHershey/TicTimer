@@ -22,6 +22,8 @@ class Session extends Thread {
         TicTimer.session_time_panel.reset();
         TicTimer.tic_time_panel.reset();
         TicTimer.d_int = 5.0;
+        TicTimer.session_total_tics = 0;
+        TicTimer.session_total_ticfree_intervals = 0;
         c1 = start_time;
         c1.add(Calendar.MILLISECOND,300);
         c1.add(Calendar.SECOND,TicTimer.total_time);
