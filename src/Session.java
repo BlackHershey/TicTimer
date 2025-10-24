@@ -28,8 +28,8 @@ class Session extends Thread {
         c1.add(Calendar.MILLISECOND,300);
         c1.add(Calendar.SECOND,TicTimer.total_time);
         //Now c1 represents the time of the end of the session
-        TicTimer.log_stream.println("NewTics subject " + TicTimer.patid + ", session " + TicTimer.session_number
-            + ", " + TicTimer.session_type + ", began at " + TicTimer.clock_panel.getTimeAsString() + "\n");
+        TicTimer.log_stream.println("Subject " + TicTimer.patid + ", session " + TicTimer.session_label
+            + ", began at " + TicTimer.clock_panel.getTimeAsString() + "\n");
 
         //Add listener to main frame
         TicTimer.main_frame.removeKeyListener(TicTimer.tic_session);

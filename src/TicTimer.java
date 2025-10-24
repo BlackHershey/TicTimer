@@ -25,7 +25,7 @@ public class TicTimer extends Thread implements KeyListener {
     static JPanel button_panel = new JPanel();
     static JLabel session_status_label = new JLabel();
     static JLabel reward_notification_label = new JLabel();
-    static JLabel tic_counter_version_label = new JLabel("program version 1.0, Aug 6, 2010");
+    static JLabel tic_counter_version_label = new JLabel("program version 1.0, 2021");
     static JButton setup_button = new JButton("Setup");
     static JButton session_button = new JButton("Start Session");
     static JButton end_button = new JButton("End Session");
@@ -54,17 +54,24 @@ public class TicTimer extends Thread implements KeyListener {
     
     // setup info variables
     static String patid = "";
+    static String study_type = "Lite";
     static String session_type;
-    static int session_number = 1;
+    static String session_label;
     
     // session timing variables
     static Double d_int = Double.valueOf(0);
+    static int total_time = 300;
     static Double running_time = Double.valueOf(0);
 
     // session total tics and tic-free intervals counts
     static int session_total_tics = 0;
     static int session_total_ticfree_intervals = 0;
     
+    // Constructor
+    public TicTimer(String study_type_arg){
+        study_type = study_type_arg;
+    }
+
     /* Setup the main JFrame and its components
      * BTW, this is directly called by TicTimer.run();
      */
@@ -213,17 +220,18 @@ public class TicTimer extends Thread implements KeyListener {
     public static boolean setup(){
         JLabel q1 = new JLabel("Enter subject number: ");
         JLabel q7 = new JLabel("Enter the total time of the session(min): ");
-        JLabel q8 = new JLabel("Enter the session number");
+        JLabel q8 = new JLabel("Enter the session label");
         JLabel q10 = new JLabel("What type of session is this?");
         String title1 = "Enter subject ID";
         String title7 = "Enter session time";
-        String title8 = "Enter session number";
+        String title8 = "Enter session label";
         String title10 = "Enter session type";
         Object a1 = new Object();
         Object a7 = new Object();
         Object a8 = new Object();
         Object a10 = new Object();
-        Object[] possibleValues = { "baseline", "verbal", "DRZ", "NCR" };
+        Object[] sessionLabelValues = { "E", "F", "G", "H", "J", "K", "M", "N", "P", "1", "2" };
+        Object[] sessionTypeValues = { "baseline", "verbal", "DRZ", "NCR" };
         int a9 = 0;
         
         while( true ){
@@ -251,25 +259,26 @@ public class TicTimer extends Thread implements KeyListener {
             try {
                 if(a8 == null)
                     return false;
-                session_number = Integer.parseInt(a8.toString());
+                session_label = a8.toString();
             } catch (Exception e) {}
-            if ( session_number > 0 && session_number <= 10 ) break;
         }
         
-        while( true ){
-            a10 = JOptionPane.showInputDialog(main_frame,q10,title10,JOptionPane.INFORMATION_MESSAGE,null,possibleValues,possibleValues[0]);
-            try {
-                if(a10 == null)
-                    return false;
-                session_type = a10.toString();
-            } catch (Exception e) {}
-            if ( session_type.length() > 2 ) break;
+        if (study_type == "NewTics"){
+            while( true ){
+                a10 = JOptionPane.showInputDialog(main_frame,q10,title10,JOptionPane.INFORMATION_MESSAGE,null,sessionTypeValues,sessionTypeValues[0]);
+                try {
+                    if(a10 == null)
+                        return false;
+                    session_type = a10.toString();
+                } catch (Exception e) {}
+                if ( session_type.length() > 2 ) break;
+            }
         }
         
         //Choose DRZ file from which to send the rewards
         if(session_type.equals("NCR")){ //if NCR
             chooser.setDialogTitle("Choose a DRZ file");
-            chooser.setSelectedFile(new File(System.getProperty("user.dir"), patid + "_session*" + "_" + possibleValues[2] + "_TicTimer_log.txt"));
+            chooser.setSelectedFile(new File(System.getProperty("user.dir"), patid + "_session*" + "_" + sessionTypeValues[2] + "_TicTimer_log.txt"));
             while ( true ){
                 try {
                     a9 = chooser.showOpenDialog(main_frame);
@@ -307,7 +316,7 @@ public class TicTimer extends Thread implements KeyListener {
         
         chooser = new JFileChooser();
         chooser.setDialogTitle("Choose a log file");
-        chooser.setSelectedFile(new File(System.getProperty("user.dir"), patid + "_session" + session_number + "_" + session_type + "_TicTimer_log.txt"));
+        chooser.setSelectedFile(new File(System.getProperty("user.dir"), patid + "_session" + session_label + "_" + session_type + "_TicTimer_log.txt"));
         while ( true ){
             try {
                 a9 = chooser.showSaveDialog(main_frame);
@@ -338,15 +347,21 @@ public class TicTimer extends Thread implements KeyListener {
     }
     
     public static void main(String[] args){
-        if(!setup_links()){
-            //Close the window and the program
-            main_frame.dispose();
-            System.exit(0); //Closes any other threads
+        if (args[0] == "NewTics"){
+            if(!setup_links()){
+                //Close the window and the program
+                main_frame.dispose();
+                System.exit(0); //Closes any other threads
+            }
+            //Start GUI
+            tic_session = new TicTimer("NewTics");
+            tic_session.start();
+        } else {
+            //Start GUI
+            tic_session = new TicTimer("Lite");
+            tic_session.start();
         }
         
-        //Start GUI
-        tic_session = new TicTimer();
-        tic_session.start();
     }
     /* Setup the links. 
      * Returns false to quit the program or true to continue.
@@ -469,7 +484,7 @@ public class TicTimer extends Thread implements KeyListener {
         progress_area.append("Total tics = " + String.valueOf(TicTimer.session_total_tics) + "\n");
         progress_area.append("Total tic-free intervals = " + String.valueOf(TicTimer.session_total_ticfree_intervals) + "\n");
         progressscroll.getVerticalScrollBar().setValue(TicTimer.progressscroll.getVerticalScrollBar().getMaximum());
-        log_stream.println("Session " + TicTimer.session_number + " ended at " + TicTimer.clock_panel.getTimeAsString() + "\n");
+        log_stream.println("Session " + TicTimer.session_label + " ended at " + TicTimer.clock_panel.getTimeAsString() + "\n");
         log_stream.println("Total tics = " + String.valueOf(TicTimer.session_total_tics));
         log_stream.println("Total tic-free intervals = " + String.valueOf(TicTimer.session_total_ticfree_intervals));
         log_stream.close();
